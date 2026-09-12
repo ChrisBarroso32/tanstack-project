@@ -1,8 +1,7 @@
-import { useRouter, notFound } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 import SkillCard from '../components/SkillCard';
-
-const POKEMON_API_URL = 'https://pokeapi.co/api/v2/pokemon';
+import { getPokemon } from "#/server/pokemon.ts";
 
 export const Route = createFileRoute('/') ({ 
   component: App,
@@ -11,16 +10,7 @@ export const Route = createFileRoute('/') ({
   ),
   pendingMs: 300,
   loader: async () => {
-    console.log('Loading data for / route...');
-
-    const response = await fetch(POKEMON_API_URL);
-    const data = await response.json();
-
-    if (!data.results || data.results.length === 0) {
-      throw notFound();
-    }
-
-    console.log('Loader data:', data);
+    const data = await getPokemon();
 
     return data;
   },
